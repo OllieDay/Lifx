@@ -1,8 +1,9 @@
 namespace Lifx
 {
-	public sealed class LightProperties
+	// Represents the state of a light.
+	public struct LightState
 	{
-		internal LightProperties(Label label, Power power, Percentage brightness, Temperature temperature, Color color)
+		internal LightState(Label label, Power power, Percentage brightness, Temperature temperature, Color color)
 		{
 			Label = label;
 			Power = power;

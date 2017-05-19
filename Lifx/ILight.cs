@@ -8,7 +8,7 @@ namespace Lifx
 	{
 		IPAddress Address { get; }
 
-		Task<LightProperties> GetPropertiesAsync();
+		Task<LightState> GetStateAsync();
 		Task SetLabelAsync(Label label);
 		Task SetPowerAsync(Power power);
 		Task SetPowerAsync(Power power, uint duration);
