@@ -7,7 +7,7 @@ namespace Lifx
 	{
 		public Temperature(int value)
 		{
-			if (!value.InRange(MinValue, MaxValue))
+			if (!value.IsBetween(MinValue, MaxValue))
 			{
 				throw new ArgumentOutOfRangeException(nameof(value), value, $"Must be {MinValue} to {MaxValue}.");
 			}
