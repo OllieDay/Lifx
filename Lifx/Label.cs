@@ -8,6 +8,11 @@ namespace Lifx
 	{
 		public Label(string value)
 		{
+			if (value == null)
+			{
+				throw new ArgumentNullException(nameof(value));
+			}
+
 			if (Encoding.UTF8.GetByteCount(value) > MaxLength)
 			{
 				throw new ArgumentException($"Size in bytes must not exceed {MaxLength}.", nameof(value));
