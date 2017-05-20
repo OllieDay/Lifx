@@ -1,8 +1,8 @@
 namespace Lifx
 {
-	public enum Power
+	public enum Power : ushort
 	{
-		Off,
-		On
+		Off = ushort.MinValue,
+		On = ushort.MaxValue
 	}
 }
