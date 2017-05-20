@@ -56,12 +56,12 @@ namespace Lifx.Communication.Responses.Payloads.Tests
 			var productData = ((uint)product).GetBytes();
 			var versionData = version.GetBytes();
 
-			return CombineByteArrays(vendorData, productData, versionData);
+			return CombineArrays(vendorData, productData, versionData);
 		}
 
-		private static byte[] CombineByteArrays(params byte[][] sequences)
+		private static byte[] CombineArrays(params byte[][] arrays)
 		{
-			return sequences.SelectMany(sequence => sequence).ToArray();
+			return arrays.SelectMany(array => array).ToArray();
 		}
 	}
 }
