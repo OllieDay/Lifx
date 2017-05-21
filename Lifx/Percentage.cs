@@ -15,8 +15,8 @@ namespace Lifx
 			Value = value;
 		}
 
-		public static double MinValue => 0;
-		public static double MaxValue => 1;
+		public static double MinValue { get; } = 0;
+		public static double MaxValue { get; } = 1;
 
 		public double Value { get; }
 

@@ -21,11 +21,10 @@ namespace Lifx
 			Value = value;
 		}
 
-		public static int MaxLength => 32;
+		public static int MaxLength { get; } = 32;
+		public static Label None { get; } = string.Empty;
 
 		public string Value { get; }
-
-		internal static Label None => string.Empty;
 
 		public static implicit operator string(Label label)
 		{

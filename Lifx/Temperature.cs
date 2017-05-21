@@ -15,29 +15,28 @@ namespace Lifx
 			Value = value;
 		}
 
-		public static int MinValue => 2500;
-		public static int MaxValue => 9000;
+		public static int MinValue { get; } = 2500;
+		public static int MaxValue { get; } = 9000;
 
-		public static Temperature BlueIce => 9000;
-		public static Temperature BlueWater => 8500;
-		public static Temperature BlueOvercast => 8000;
-		public static Temperature BlueDaylight => 7500;
-		public static Temperature CloudyDaylight => 7000;
-		public static Temperature BrightDaylight => 6500;
-		public static Temperature NoonDaylight => 6000;
-		public static Temperature Daylight => 5500;
-		public static Temperature SoftDaylight => 5000;
-		public static Temperature CoolDaylight => 4500;
-		public static Temperature Cool => 4000;
-		public static Temperature Neutral => 3500;
-		public static Temperature NeutralWarm => 3200;
-		public static Temperature Warm => 3000;
-		public static Temperature Incandescent => 2750;
-		public static Temperature UltraWarm => 2500;
+		public static Temperature None { get; } = MinValue;
+		public static Temperature BlueIce { get; } = 9000;
+		public static Temperature BlueWater { get; } = 8500;
+		public static Temperature BlueOvercast { get; } = 8000;
+		public static Temperature BlueDaylight { get; } = 7500;
+		public static Temperature CloudyDaylight { get; } = 7000;
+		public static Temperature BrightDaylight { get; } = 6500;
+		public static Temperature NoonDaylight { get; } = 6000;
+		public static Temperature Daylight { get; } = 5500;
+		public static Temperature SoftDaylight { get; } = 5000;
+		public static Temperature CoolDaylight { get; } = 4500;
+		public static Temperature Cool { get; } = 4000;
+		public static Temperature Neutral { get; } = 3500;
+		public static Temperature NeutralWarm { get; } = 3200;
+		public static Temperature Warm { get; } = 3000;
+		public static Temperature Incandescent { get; } = 2750;
+		public static Temperature UltraWarm { get; } = 2500;
 
 		public int Value { get; }
-
-		internal static Temperature None => MinValue;
 
 		public static implicit operator int(Temperature temperature)
 		{
