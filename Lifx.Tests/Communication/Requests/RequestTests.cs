@@ -18,7 +18,9 @@ namespace Lifx.Communication.Requests.Tests
 		[Fact]
 		public void GetDataShouldReturnDataOfCorrectLengthWhenPayloadIsEmpty()
 		{
-			CreateRequestData().Length.Should().Be(RequestLength);
+			var data = CreateRequestData();
+
+			data.Length.Should().Be(RequestLength);
 		}
 
 		[Fact]
@@ -26,14 +28,18 @@ namespace Lifx.Communication.Requests.Tests
 		{
 			var payload = new SetPowerRequestPayload(Power.Off, durationInMilliseconds: 0);
 			var length = RequestLength + payload.GetData().Length;
+			var data = CreateRequestData(payload: payload);
 
-			CreateRequestData(payload: payload).Length.Should().Be(length);
+			data.Length.Should().Be(length);
 		}
 
 		[Fact]
 		public void GetDataShouldReturnDataWithCorrectSizeWhenPayloadIsEmpty()
 		{
-			GetSizeFromData(CreateRequestData()).Should().Be(RequestLength);
+			var data = CreateRequestData();
+			var size = GetSizeFromData(data);
+
+			size.Should().Be(RequestLength);
 		}
 
 		[Fact]
@@ -41,8 +47,10 @@ namespace Lifx.Communication.Requests.Tests
 		{
 			var payload = new SetPowerRequestPayload(Power.Off, durationInMilliseconds: 0);
 			var length = (ushort)(RequestLength + payload.GetData().Length);
+			var data = CreateRequestData(payload: payload);
+			var size = GetSizeFromData(data);
 
-			GetSizeFromData(CreateRequestData(payload: payload)).Should().Be(length);
+			size.Should().Be(length);
 		}
 
 		[Fact]
@@ -51,8 +59,9 @@ namespace Lifx.Communication.Requests.Tests
 			const int protocolFlag = 0x400;
 
 			var frameFragment = GetFrameFragmentFromData(CreateRequestData());
+			var flag = frameFragment & protocolFlag;
 
-			(frameFragment & protocolFlag).Should().Be(protocolFlag);
+			flag.Should().Be(protocolFlag);
 		}
 
 		[Fact]
@@ -61,8 +70,9 @@ namespace Lifx.Communication.Requests.Tests
 			const int addressableFlag = 0x1000;
 
 			var frameFragment = GetFrameFragmentFromData(CreateRequestData());
+			var flag = frameFragment & addressableFlag;
 
-			(frameFragment & addressableFlag).Should().Be(addressableFlag);
+			flag.Should().Be(addressableFlag);
 		}
 
 		[Fact]
@@ -71,8 +81,9 @@ namespace Lifx.Communication.Requests.Tests
 			const ulong target = 0;
 
 			var frameFragment = GetFrameFragmentFromData(CreateRequestData(target: target));
+			var flag = frameFragment & TaggedFlag;
 
-			(frameFragment & TaggedFlag).Should().Be(TaggedFlag);
+			flag.Should().Be(TaggedFlag);
 		}
 
 		[Fact]
@@ -81,8 +92,9 @@ namespace Lifx.Communication.Requests.Tests
 			const ulong target = ulong.MaxValue;
 
 			var frameFragment = GetFrameFragmentFromData(CreateRequestData(target: target));
+			var flag = frameFragment & TaggedFlag;
 
-			(frameFragment & TaggedFlag).Should().NotBe(TaggedFlag);
+			flag.Should().NotBe(TaggedFlag);
 		}
 
 		[Fact]
@@ -91,7 +103,9 @@ namespace Lifx.Communication.Requests.Tests
 			const int sourceOffset = 4;
 			const uint source = uint.MaxValue;
 
-			CreateRequestData(source: source).ToUInt32(startIndex: sourceOffset).Should().Be(source);
+			var data = CreateRequestData(source: source);
+
+			data.ToUInt32(startIndex: sourceOffset).Should().Be(source);
 		}
 
 		[Fact]
@@ -100,39 +114,45 @@ namespace Lifx.Communication.Requests.Tests
 			const int targetOffset = 8;
 			const ulong target = ulong.MaxValue;
 
-			CreateRequestData(target: target).ToUInt64(startIndex: targetOffset).Should().Be(target);
+			var data = CreateRequestData(target: target);
+
+			data.ToUInt64(startIndex: targetOffset).Should().Be(target);
 		}
 
 		[Fact]
 		public void GetDataShouldReturnDataWithResRequiredFlagSetWhenResRequiredIsTrue()
 		{
 			var frameAddressFragment = CreateRequestData(resRequired: true)[FrameAddressFragmentOffset];
+			var flag = frameAddressFragment & ResRequiredFlag;
 
-			(frameAddressFragment & ResRequiredFlag).Should().Be(ResRequiredFlag);
+			flag.Should().Be(ResRequiredFlag);
 		}
 
 		[Fact]
 		public void GetDataShouldReturnDataWithoutResRequiredFlagSetWhenResRequiredIsFalse()
 		{
 			var frameAddressFragment = CreateRequestData(resRequired: false)[FrameAddressFragmentOffset];
+			var flag = frameAddressFragment & ResRequiredFlag;
 
-			(frameAddressFragment & ResRequiredFlag).Should().NotBe(ResRequiredFlag);
+			flag.Should().NotBe(ResRequiredFlag);
 		}
 
 		[Fact]
 		public void GetDataShouldReturnDataWithAckRequiredFlagSetWhenAckRequiredIsTrue()
 		{
 			var frameAddressFragment = CreateRequestData(ackRequired: true)[FrameAddressFragmentOffset];
+			var flag = frameAddressFragment & AckRequiredFlag;
 
-			(frameAddressFragment & AckRequiredFlag).Should().Be(AckRequiredFlag);
+			flag.Should().Be(AckRequiredFlag);
 		}
 
 		[Fact]
 		public void GetDataShouldReturnDataWithoutAckRequiredFlagSetWhenAckRequiredIsFalse()
 		{
 			var frameAddressFragment = CreateRequestData(ackRequired: false)[FrameAddressFragmentOffset];
+			var flag = frameAddressFragment & AckRequiredFlag;
 
-			(frameAddressFragment & AckRequiredFlag).Should().NotBe(AckRequiredFlag);
+			flag.Should().NotBe(AckRequiredFlag);
 		}
 
 		[Fact]
@@ -141,7 +161,9 @@ namespace Lifx.Communication.Requests.Tests
 			const int sequenceOffset = 23;
 			const byte sequence = byte.MaxValue;
 
-			CreateRequestData(sequence: sequence)[sequenceOffset].Should().Be(sequence);
+			var data = CreateRequestData(sequence: sequence);
+
+			data[sequenceOffset].Should().Be(sequence);
 		}
 
 		[Fact]
@@ -150,7 +172,9 @@ namespace Lifx.Communication.Requests.Tests
 			const int commandOffset = 32;
 			const Command command = Command.DeviceEchoRequest;
 
-			((Command)CreateRequestData(command: command).ToUInt16(startIndex: commandOffset)).Should().Be(command);
+			var data = CreateRequestData(command: command);
+
+			((Command)data.ToUInt16(startIndex: commandOffset)).Should().Be(command);
 		}
 
 		private static byte[] CreateRequestData(
