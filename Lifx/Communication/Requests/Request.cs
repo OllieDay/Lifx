@@ -153,14 +153,6 @@ namespace Lifx.Communication.Requests
 	// byte-order.
 	internal sealed class Request
 	{
-		private readonly Command _command;
-		private readonly bool _ackRequired;
-		private readonly bool _resRequired;
-		private readonly byte _sequence;
-		private readonly uint _source;
-		private readonly ulong _target;
-		private readonly RequestPayload _payload;
-
 		public Request(
 			Command command,
 			bool ackRequired,
@@ -171,21 +163,29 @@ namespace Lifx.Communication.Requests
 			RequestPayload payload
 		)
 		{
-			_command = command;
-			_ackRequired = ackRequired;
-			_resRequired = resRequired;
-			_sequence = sequence;
-			_source = source;
-			_target = target;
-			_payload = payload;
+			Command = command;
+			AckRequired = ackRequired;
+			ResRequired = resRequired;
+			Sequence = sequence;
+			Source = source;
+			Target = target;
+			Payload = payload;
 		}
+
+		public Command Command { get; }
+		public bool AckRequired { get; }
+		public bool ResRequired { get; }
+		public byte Sequence { get; }
+		public uint Source { get; }
+		public ulong Target { get; }
+		public RequestPayload Payload { get; }
 
 		public byte[] GetData()
 		{
 			var frameData = GetFrameData();
 			var frameAddressData = GetFrameAddressData();
 			var protocolHeaderData = GetProtocolHeaderData();
-			var payloadData = _payload.GetData();
+			var payloadData = Payload.GetData();
 
 			return CombineArrays(frameData, frameAddressData, protocolHeaderData, payloadData);
 		}
@@ -199,14 +199,14 @@ namespace Lifx.Communication.Requests
 		{
 			var sizeData = GetSizeData();
 			var frameFragmentData = GetFrameFragmentData();
-			var sourceData = _source.GetBytes();
+			var sourceData = Source.GetBytes();
 
 			return CombineArrays(sizeData, frameFragmentData, sourceData);
 		}
 
 		private byte[] GetFrameAddressData()
 		{
-			var targetData = _target.GetBytes();
+			var targetData = Target.GetBytes();
 			var reservedData = new byte[6];
 			var frameAddressFragmentData = GetFrameAddressFragmentData();
 			var sequenceData = GetSequenceData();
@@ -227,7 +227,7 @@ namespace Lifx.Communication.Requests
 		{
 			const int headerLength = 36;
 
-			var payloadLength = _payload.GetData().Length;
+			var payloadLength = Payload.GetData().Length;
 			var size = (ushort)(headerLength + payloadLength);
 
 			return size.GetBytes();
@@ -243,7 +243,7 @@ namespace Lifx.Communication.Requests
 			ushort fragment = protocolFlag | addressableFlag;
 
 			// A target device address of all zeroes addresses all devices on the local network
-			if (_target == 0)
+			if (Target == 0)
 			{
 				fragment |= taggedFlag;
 			}
@@ -258,12 +258,12 @@ namespace Lifx.Communication.Requests
 
 			byte fragment = 0;
 
-			if (_resRequired)
+			if (ResRequired)
 			{
 				fragment |= resRequiredFlag;
 			}
 
-			if (_ackRequired)
+			if (AckRequired)
 			{
 				fragment |= ackRequiredFlag;
 			}
@@ -278,13 +278,13 @@ namespace Lifx.Communication.Requests
 		{
 			return new[]
 			{
-				_sequence
+				Sequence
 			};
 		}
 
 		private byte[] GetCommandData()
 		{
-			return ((ushort)_command).GetBytes();
+			return ((ushort)Command).GetBytes();
 		}
 	}
 }
