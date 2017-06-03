@@ -7,6 +7,8 @@ namespace Lifx
 	public interface ILight : IDisposable
 	{
 		IPAddress Address { get; }
+		Product Product { get; }
+		uint Version { get; }
 
 		Task<LightState> GetStateAsync();
 		Task SetLabelAsync(Label label);

@@ -1,7 +1,7 @@
 namespace Lifx
 {
 	// Represents the Lifx product type.
-	internal enum Product : uint
+	public enum Product : uint
 	{
 		Unknown = 0,
 		Original1000 = 1,
