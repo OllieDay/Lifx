@@ -56,21 +56,25 @@ namespace Lifx.Communication.Requests
 
 		public Request CreateSetLabelRequest(Label label)
 		{
+			var payload = new SetLabelRequestPayload(label);
+			
 			return CreateRequest(
 				Command.DeviceSetLabel,
 				ackRequired: true,
 				resRequired: false,
-				payload: new SetLabelRequestPayload(label)
+				payload: payload
 			);
 		}
 
 		public Request CreateSetPowerRequest(Power power, uint durationInMilliseconds)
 		{
+			var payload = new SetPowerRequestPayload(power, durationInMilliseconds);
+
 			return CreateRequest(
 				Command.DeviceSetPower,
 				ackRequired: true,
 				resRequired: false,
-				payload: new SetPowerRequestPayload(power, durationInMilliseconds)
+				payload: payload
 			);
 		}
 
@@ -81,11 +85,13 @@ namespace Lifx.Communication.Requests
 			uint durationInMilliseconds
 		)
 		{
+			var payload = new SetColorRequestPayload(color, brightness, temperature, durationInMilliseconds);
+
 			return CreateRequest(
 				Command.LightSetColor,
 				ackRequired: true,
 				resRequired: false,
-				payload: new SetColorRequestPayload(color, brightness, temperature, durationInMilliseconds)
+				payload: payload
 			);
 		}
 
@@ -94,15 +100,7 @@ namespace Lifx.Communication.Requests
 			// Response will contain the same sequence so it can be identified.
 			var sequence = (byte)Interlocked.Increment(ref _sequence);
 
-			return new Request(
-				command: command,
-				ackRequired: ackRequired,
-				resRequired: resRequired,
-				sequence: sequence,
-				source: Source,
-				target: Target,
-				payload: payload
-			);
+			return new Request(command, ackRequired, resRequired, sequence, Source, Target, payload);
 		}
 	}
 }
