@@ -8,7 +8,7 @@ namespace Lifx.Communication.Requests.Tests
 {
 	public sealed class RequestFactoryTests
 	{
-		private static readonly IRequestFactory RequestFactory = new RequestFactory();
+		private static readonly RequestFactory RequestFactory = new RequestFactory();
 
 		[Fact]
 		public void CreateGetVersionRequestShouldReturnRequestWithCorrectProperties()
