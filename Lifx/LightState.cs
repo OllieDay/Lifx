@@ -17,5 +17,17 @@ namespace Lifx
 		public Percentage Brightness { get; }
 		public Temperature Temperature { get; }
 		public Color Color { get; }
+
+		public override string ToString()
+		{
+			return string.Format(
+				"[Label: {0}; Power: {1}; Brightness: {2}; Temperature: {3}; Color: {4}]",
+				Label,
+				Power,
+				Brightness,
+				Temperature,
+				Color
+			);
+		}
 	}
 }
