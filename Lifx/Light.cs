@@ -129,6 +129,11 @@ namespace Lifx
 
 		public async Task SetColorAsync(Color color, uint durationInMilliseconds)
 		{
+			if (!Product.SupportsColor())
+			{
+				throw new InvalidOperationException($"{Product} does not support color.");
+			}
+
 			var state = await GetStateAsync();
 			var request = _requestFactory.CreateSetColorRequest(
 				color,

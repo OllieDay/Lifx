@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -135,6 +136,21 @@ namespace Lifx.Tests
 					It.IsAny<uint>()
 				)
 			);
+		}
+
+		[Theory]
+		[InlineData(Product.White800LowVoltage)]
+		[InlineData(Product.White800HightVoltage)]
+		[InlineData(Product.White900BR30)]
+		public void SetColorAsyncShouldThrowInvalidOperationExceptionWhenProductDoesNotSupportColor(Product product)
+		{
+			using (var light = CreateLight())
+			{
+				Assert.ThrowsAnyAsync<InvalidOperationException>(async () =>
+				{
+					await light.SetColorAsync(It.IsAny<Color>());
+				});
+			}
 		}
 
 		[Fact]
