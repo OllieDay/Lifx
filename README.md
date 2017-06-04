@@ -1,5 +1,5 @@
 # Lifx
-Library for controlling LIFX devices over the LAN.
+Library for controlling LIFX Wi-Fi Smart LED devices over the LAN.
 
 ## Overview
 This library allows you to communicate with LIFX devices over the LAN without relying on the LIFX HTTP API.
