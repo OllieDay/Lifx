@@ -7,7 +7,7 @@ using Lifx.Communication.Responses;
 
 namespace Lifx.Communication.Requests
 {
-	internal sealed class RequestFactory
+	internal sealed class RequestFactory : IRequestFactory
 	{
 		// The `source` identifier allows each client to provide an unique value,
 		// which will be included by the LIFX device in any message that is sent in
@@ -57,7 +57,7 @@ namespace Lifx.Communication.Requests
 		public Request CreateSetLabelRequest(Label label)
 		{
 			var payload = new SetLabelRequestPayload(label);
-			
+
 			return CreateRequest(
 				Command.DeviceSetLabel,
 				ackRequired: true,
