@@ -94,14 +94,8 @@ namespace Lifx
 		public async Task SetBrightnessAsync(Percentage brightness, uint durationInMilliseconds)
 		{
 			var state = await GetStateAsync();
-			var request = _requestFactory.CreateSetColorRequest(
-				state.Color,
-				brightness,
-				state.Temperature,
-				durationInMilliseconds
-			);
 
-			await _communicator.CommunicateAsync(request);
+			await SetPropertiesAsync(state.Color, brightness, state.Temperature, durationInMilliseconds);
 		}
 
 		public async Task SetTemperatureAsync(Temperature temperature)
@@ -112,14 +106,8 @@ namespace Lifx
 		public async Task SetTemperatureAsync(Temperature temperature, uint durationInMilliseconds)
 		{
 			var state = await GetStateAsync();
-			var request = _requestFactory.CreateSetColorRequest(
-				Color.None,
-				state.Brightness,
-				temperature,
-				durationInMilliseconds
-			);
 
-			await _communicator.CommunicateAsync(request);
+			await SetPropertiesAsync(Color.None, state.Brightness, temperature, durationInMilliseconds);
 		}
 
 		public async Task SetColorAsync(Color color)
@@ -135,14 +123,8 @@ namespace Lifx
 			}
 
 			var state = await GetStateAsync();
-			var request = _requestFactory.CreateSetColorRequest(
-				color,
-				state.Brightness,
-				state.Temperature,
-				durationInMilliseconds
-			);
-			
-			await _communicator.CommunicateAsync(request);
+
+			await SetPropertiesAsync(color, state.Brightness, state.Temperature, durationInMilliseconds);
 		}
 
 		public override string ToString()
@@ -153,6 +135,18 @@ namespace Lifx
 		public void Dispose()
 		{
 			_communicator.Dispose();
+		}
+
+		private async Task SetPropertiesAsync(
+			Color color,
+			Percentage brightness,
+			Temperature temperature,
+			uint durationInMilliseconds
+		)
+		{
+			var request = _requestFactory.CreateSetColorRequest(color, brightness, temperature, durationInMilliseconds);
+
+			await _communicator.CommunicateAsync(request);
 		}
 	}
 }
