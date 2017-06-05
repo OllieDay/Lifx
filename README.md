@@ -71,7 +71,7 @@ await light.OffAsync();
 await light.OnAsync();
 ```
 
-Each of these methods have an override that takes a `uint` parameter used to specify the duration in milliseconds for
+Each of these methods have an overload that takes a `uint` parameter used to specify the duration in milliseconds for
 the power change.
 
 ```csharp
@@ -90,7 +90,7 @@ Light brightness can be set using `SetBrightnessAsync(Percentage)` where the `Pe
 await light.SetBrightnessAsync(0.5);
 ```
 
-This method has an override that takes a `uint` parameter used to specify the duration in milliseconds for the
+This method has an overload that takes a `uint` parameter used to specify the duration in milliseconds for the
 brightness change.
 
 ```csharp
@@ -132,7 +132,7 @@ public static Temperature Incandescent { get; } = 2750;
 public static Temperature UltraWarm { get; } = 2500;
 ```
 
-This method has an override that takes a `uint` parameter used to specify the duration in milliseconds for the
+This method has an overload that takes a `uint` parameter used to specify the duration in milliseconds for the
 temperature change.
 
 ```csharp
@@ -148,7 +148,7 @@ Light color can be set using `SetColorAsync(Color)` where the `Color` parameter 
 await light.SetColorAsync(new Color(180, 0.5));
 ```
 
-This method has an override that takes a `uint` parameter used to specify the duration in milliseconds for the
+This method has an overload that takes a `uint` parameter used to specify the duration in milliseconds for the
 color change.
 
 ```csharp
