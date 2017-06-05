@@ -12,7 +12,7 @@ namespace Lifx.Communication.Requests.Payloads.Tests
 		{
 			const int hueOffset = 1;
 
-			var color = new Color(Hue.MaxValue, Percentage.MinValue);
+			var color = Color.Cyan;
 			var data = CreatePayloadData(color, Percentage.MaxValue, Temperature.None, 0);
 
 			HueConverter.ConvertUInt16ToHue(data.ToUInt16(hueOffset)).Should().Be(color.Hue);
@@ -23,7 +23,7 @@ namespace Lifx.Communication.Requests.Payloads.Tests
 		{
 			const int saturationOffset = 3;
 
-			var color = new Color(Hue.MinValue, Percentage.MaxValue);
+			var color = Color.Cyan;
 			var data = CreatePayloadData(color, Percentage.MaxValue, Temperature.None, 0);
 
 			PercentageConverter.ConvertUInt16ToPercentage(

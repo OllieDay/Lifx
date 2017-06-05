@@ -16,7 +16,7 @@ namespace Lifx.Tests
 		[Fact]
 		public async Task SetBrightnessAsyncShouldUseCurrentColorAndTemperature()
 		{
-			var color = new Color(Hue.MaxValue, Percentage.MaxValue);
+			var color = Color.Cyan;
 			var temperature = Temperature.Neutral;
 
 			var communicator = CreateCommunicator(

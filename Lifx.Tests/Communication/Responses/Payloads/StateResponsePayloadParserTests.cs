@@ -13,7 +13,7 @@ namespace Lifx.Communication.Responses.Payloads.Tests
 		[Fact]
 		public void ParseShouldReturnPayloadWithValidColor()
 		{
-			var color = new Color(Hue.MaxValue, Percentage.MaxValue);
+			var color = Color.Cyan;
 
 			var data = CreatePayloadData(color, Percentage.MinValue, Temperature.MinValue, Power.Off, Label.None);
 
