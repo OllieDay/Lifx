@@ -97,24 +97,22 @@ await light.SetTemperatureAsync(Temperature.Warm);
 ```
 
 ### Named temperature values
-```csharp
-public static Temperature BlueIce { get; } = 9000;
-public static Temperature BlueWater { get; } = 8500;
-public static Temperature BlueOvercast { get; } = 8000;
-public static Temperature BlueDaylight { get; } = 7500;
-public static Temperature CloudyDaylight { get; } = 7000;
-public static Temperature BrightDaylight { get; } = 6500;
-public static Temperature NoonDaylight { get; } = 6000;
-public static Temperature Daylight { get; } = 5500;
-public static Temperature SoftDaylight { get; } = 5000;
-public static Temperature CoolDaylight { get; } = 4500;
-public static Temperature Cool { get; } = 4000;
-public static Temperature Neutral { get; } = 3500;
-public static Temperature NeutralWarm { get; } = 3200;
-public static Temperature Warm { get; } = 3000;
-public static Temperature Incandescent { get; } = 2750;
-public static Temperature UltraWarm { get; } = 2500;
-```
+* `BlueIce`
+* `BlueWater`
+* `BlueOvercast`
+* `BlueDaylight`
+* `CloudyDaylight`
+* `BrightDaylight`
+* `NoonDaylight`
+* `Daylight`
+* `SoftDaylight`
+* `CoolDaylight`
+* `Cool`
+* `Neutral`
+* `NeutralWarm`
+* `Warm`
+* `Incandescent`
+* `UltraWarm`
 
 ## Device color
 Light color can be set using `SetColorAsync(Color)` where the `Color` parameter is a struct comprised of hue
