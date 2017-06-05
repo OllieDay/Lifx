@@ -22,6 +22,13 @@ using (var light = await lightFactory.CreateLightAsync(IPAddress.Parse("192.168.
 }
 ```
 
+The `LightFactory` class has an overloaded constructor that takes an `int` parameter used to specify the port number
+used when communicating with lights. The default port number used with the parameterless constructor is 56700.
+
+```csharp
+var lightFactory = new LightFactory(1000);
+```
+
 ## Device info
 Use the overridden `ToString()` method of the `ILight` object to obtain a string representation of the device.
 
