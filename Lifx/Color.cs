@@ -9,6 +9,8 @@
 			Saturation = saturation;
 		}
 
+		public static Color None { get; } = White;
+
 		public static Color White { get; } = new Color(0, 0);
 		public static Color Red { get; } = new Color(0, 1);
 		public static Color Orange { get; } = new Color(36, 1);
@@ -21,8 +23,6 @@
 
 		public Hue Hue { get; }
 		public Percentage Saturation { get; }
-
-		internal static Color None { get; } = new Color(Hue.MinValue, Percentage.MinValue);
 
 		public override string ToString()
 		{
