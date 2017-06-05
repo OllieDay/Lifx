@@ -10,8 +10,7 @@ Protocol.
 
 ## Device creation
 The `LightFactory` class provides functionality for creating `ILight` objects from a given IP address. The `ILight`
-object contains the IP address, product (i.e. model) and version of the device and is used for all control
-operations.
+object contains the IP address, product (i.e. model) and version of the device and is used for all control operations.
 
 ```csharp
 var lightFactory = new LightFactory();
