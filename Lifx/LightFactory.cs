@@ -10,13 +10,22 @@ namespace Lifx
 {
 	public sealed class LightFactory
 	{
-		private const int Port = 56700;
+		private const int DefaultPort = 56700;
 
 		private static readonly TimeSpan ResponseExpiry = TimeSpan.FromSeconds(5);
 		private static readonly IResponseParser ResponseParser = new ResponseParser(
 			new StateVersionResponsePayloadParser(),
 			new StateResponsePayloadParser()
 		);
+
+		private readonly int _port;
+
+		public LightFactory(int port)
+		{
+			_port = port;
+		}
+
+		public LightFactory() : this(DefaultPort) { }
 
 		public async Task<ILight> CreateLightAsync(IPAddress address)
 		{
@@ -25,7 +34,7 @@ namespace Lifx
 				throw new ArgumentNullException(nameof(address));
 			}
 
-			var endPoint = new IPEndPoint(address, Port);
+			var endPoint = new IPEndPoint(address, _port);
 			var communicator = new Communicator(ResponseParser, endPoint, ResponseExpiry);
 			var requestFactory = new RequestFactory();
 
