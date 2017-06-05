@@ -85,8 +85,8 @@ await light.SetBrightnessAsync(0.5);
 
 ## Device temperature
 Light temperature can be set using `SetTemperatureAsync(Temperature)` where the `Temperature` parameter is an `int`
-between 2500 and 9000 representing kelvin value. The `Temperature` struct contains named temperature values accessible
-via static properties.
+between 2500 and 9000 representing kelvin value. The `Temperature` struct exposes static properties with named
+temperature values.
 
 ```csharp
 // Set temperature to explicit value
