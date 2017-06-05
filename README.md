@@ -116,11 +116,27 @@ await light.SetTemperatureAsync(Temperature.Warm);
 
 ## Device color
 Light color can be set using `SetColorAsync(Color)` where the `Color` parameter is a struct comprised of hue
-(`int` between 0 and 360) and saturation (`float` between 0 and 1).
+(`int` between 0 and 360) and saturation (`float` between 0 and 1). The `Color` struct exposes static properties with
+named color values.
 
 ```csharp
+// Set color to explicit value
 await light.SetColorAsync(new Color(180, 0.5));
+
+// Set color to named value
+await light.SetColorAsync(Color.Red);
 ```
+
+### Named color values
+* `White`
+* `Red`
+* `Orange`
+* `Yellow`
+* `Green`
+* `Cyan`
+* `Blue`
+* `Purple`
+* `Pink`
 
 _Note: this method is only applicable to devices that support color. Calling this method on an unsupported device
 will result in an `InvalidOperationException` being thrown._
