@@ -34,7 +34,9 @@ Use the overridden `ToString()` method of the `ILight` object to obtain a string
 ```csharp
 Console.WriteLine(light);
 ```
-Output: `[Address: 192.168.0.100; Product: White800HightVoltage; Version: 0]`
+
+### Output
+`[Address: 192.168.0.100; Product: White800HightVoltage; Version: 0]`
 
 ## Device state
 Use the `GetStateAsync()` method to retrieve the current state of the device, and the overridden `ToString()` method of
@@ -46,7 +48,9 @@ var state = await light.GetStateAsync();
 
 Console.WriteLine(state);
 ```
-Output: `[Label: Office; Power: On; Brightness: 1; Temperature: 3000; Color: [Hue: 0; Saturation: 0]]`
+
+### Output
+`[Label: Office; Power: On; Brightness: 1; Temperature: 3000; Color: [Hue: 0; Saturation: 0]]`
 
 ## Device label
 Use the `SetLabelAsync()` method of the `ILight` object to set the device label. A label should consist of no more than
@@ -71,31 +75,12 @@ await light.OffAsync();
 await light.OnAsync();
 ```
 
-Each of these methods have an overload that takes a `uint` parameter used to specify the duration in milliseconds for
-the power change.
-
-```csharp
-// Change power over a 10 second duration
-await light.SetPowerAsync(Power.Off, 10000);
-await light.SetPowerAsync(Power.On, 10000);
-await light.OffAsync(10000);
-await light.OnAsync(10000);
-```
-
 ## Device brightness
 Light brightness can be set using `SetBrightnessAsync(Percentage)` where the `Percentage` parameter is a `float` between
 0 and 1.
 
 ```csharp
 await light.SetBrightnessAsync(0.5);
-```
-
-This method has an overload that takes a `uint` parameter used to specify the duration in milliseconds for the
-brightness change.
-
-```csharp
-// Change brightness over a 10 second duration
-await light.SetBrightnessAsync(0.5, 10000);
 ```
 
 ## Device temperature
@@ -111,8 +96,7 @@ await light.SetTemperatureAsync(3500);
 await light.SetTemperatureAsync(Temperature.Warm);
 ```
 
-Named temperature values:
-
+### Named temperature values
 ```csharp
 public static Temperature BlueIce { get; } = 9000;
 public static Temperature BlueWater { get; } = 8500;
@@ -132,14 +116,6 @@ public static Temperature Incandescent { get; } = 2750;
 public static Temperature UltraWarm { get; } = 2500;
 ```
 
-This method has an overload that takes a `uint` parameter used to specify the duration in milliseconds for the
-temperature change.
-
-```csharp
-// Change temperature over a 10 second duration
-await light.SetTemperatureAsync(3500, 10000);
-```
-
 ## Device color
 Light color can be set using `SetColorAsync(Color)` where the `Color` parameter is a struct comprised of hue
 (`int` between 0 and 360) and saturation (`float` between 0 and 1).
@@ -148,13 +124,33 @@ Light color can be set using `SetColorAsync(Color)` where the `Color` parameter 
 await light.SetColorAsync(new Color(180, 0.5));
 ```
 
-This method has an overload that takes a `uint` parameter used to specify the duration in milliseconds for the
-color change.
+_Note: this method is only applicable to devices that support color. Calling this method on an unsupported device
+will result in an `InvalidOperationException` being thrown._
 
-```csharp
-// Change color over a 10 second duration
-await light.SetColorAsync(new Color(180, 0.5), 10000);
-```
+## Device transition duration
+The following methods of the `ILight` object have overloads that take a `uint` parameter used to specify the duration in
+milliseconds for the transition.
 
-Note that this method is only applicable to devices that support color. Calling this method on an unsupported device
-will result in an `InvalidOperationException` being thrown.
+* `SetPowerAsync(Power)`
+* `OffAsync()`
+* `OnAsync()`
+* `SetBrightnessAsync(Percentage)`
+* `SetTemperatureAsync(Temperature)`
+* `SetColorAsync(Color)`
+
+## Task cancellation
+The following methods of the `LightFactory` and `ILight` object have overloads that take a `CancellationToken` parameter
+used to cancel a running task.
+
+### LightFactory
+* `CreateLightAsync(IPAddress)`
+
+### ILight
+* `GetStateAsync()`
+* `SetLabelAsync(Label)`
+* `SetPowerAsync(Power)`
+* `OffAsync()`
+* `OnAsync()`
+* `SetBrightnessAsync(Percentage)`
+* `SetTemperatureAsync(Temperature)`
+* `SetColorAsync(Color)`
