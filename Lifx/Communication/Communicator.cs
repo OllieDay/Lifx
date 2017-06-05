@@ -27,26 +27,28 @@ namespace Lifx.Communication
 			_responseExpiry = responseExpiry;
 		}
 
-		public async Task CommunicateAsync(Request request)
+		public async Task CommunicateAsync(Request request, CancellationToken cancellationToken)
 		{
 			if (request.AckRequired)
 			{
 				// Wait for an acknowledgement - response contains an empty payload
-				await CommunicateAsync<ResponsePayload>(request);
+				await CommunicateAsync<ResponsePayload>(request, cancellationToken);
 			}
 			else
 			{
 				// Don't wait for an acknowledgement - fire and forget
-				await SendRequestAsync(request);
+				await SendRequestAsync(request, cancellationToken);
 			}
 		}
 
-		public async Task<TResponsePayload> CommunicateAsync<TResponsePayload>(Request request)
-			where TResponsePayload : ResponsePayload
+		public async Task<TResponsePayload> CommunicateAsync<TResponsePayload>(
+			Request request,
+			CancellationToken cancellationToken
+		) where TResponsePayload : ResponsePayload
 		{
-			await SendRequestAsync(request);
+			await SendRequestAsync(request, cancellationToken);
 
-			var response = await ReceiveResponseAsync(request.Sequence);
+			var response = await ReceiveResponseAsync(request.Sequence, cancellationToken);
 
 			return (TResponsePayload)response.Payload;
 		}
@@ -56,52 +58,47 @@ namespace Lifx.Communication
 			_client.Dispose();
 		}
 
-		private async Task SendRequestAsync(Request request)
+		private async Task SendRequestAsync(Request request, CancellationToken cancellationToken)
 		{
 			var data = request.GetData();
 
-			await _client.SendAsync(data, data.Length, _endPoint).ConfigureAwait(false);
+			await _client.SendAsync(data, data.Length, _endPoint)
+				.WithCancellation(cancellationToken)
+				.ConfigureAwait(false);
 		}
 
-		private async Task<Response> ReceiveResponseAsync(byte sequence)
+		private async Task<Response> ReceiveResponseAsync(byte sequence, CancellationToken cancellationToken)
 		{
-			using (var cancellationTokenSource = new CancellationTokenSource())
+			// Continue until the task is cancelled
+			while (true)
 			{
-				cancellationTokenSource.CancelAfter(_responseExpiry);
+				cancellationToken.ThrowIfCancellationRequested();
 
-				// Continue until the task is cancelled
-				while (true)
+				Response response;
+
+				// Return response if sequence matches
+				if (_responses.TryGetValue(sequence, out response))
 				{
-					cancellationTokenSource.Token.ThrowIfCancellationRequested();
+					var expiry = response.CreationDate.Add(_responseExpiry);
 
-					Response response;
-
-					// Return response if sequence matches
-					if (_responses.TryGetValue(sequence, out response))
+					if (expiry > DateTime.UtcNow)
 					{
-						var expiry = response.CreationDate.Add(_responseExpiry);
+						return response;
+					}
+				}
 
-						if (expiry > DateTime.UtcNow)
-						{
-							return response;
-						}
+				var result = await _client.ReceiveAsync().WithCancellation(cancellationToken).ConfigureAwait(false);
+
+				// Return response if sequence matches
+				if (_responseParser.TryParseResponse(result.Buffer, out response))
+				{
+					if (response.Sequence == sequence)
+					{
+						return response;
 					}
 
-					var result = await _client.ReceiveAsync()
-						.WithCancellation(cancellationTokenSource.Token)
-						.ConfigureAwait(false);
-
-					// Return response if sequence matches
-					if (_responseParser.TryParseResponse(result.Buffer, out response))
-					{
-						if (response.Sequence == sequence)
-						{
-							return response;
-						}
-
-						// The response isn't a match for this sequence, but could be valid for another request
-						_responses.AddOrUpdate(sequence, response, (_, __) => response);
-					}
+					// The response isn't a match for this sequence, but could be valid for another request
+					_responses.AddOrUpdate(sequence, response, (_, __) => response);
 				}
 			}
 		}

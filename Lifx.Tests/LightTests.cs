@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Lifx.Communication;
@@ -168,8 +169,12 @@ namespace Lifx.Tests
 		{
 			var mock = new Mock<ICommunicator>();
 
-			mock.Setup(communicator => communicator.CommunicateAsync<StateResponsePayload>(It.IsAny<Request>()))
-				.ReturnsAsync(payload);
+			mock.Setup(
+				communicator => communicator.CommunicateAsync<StateResponsePayload>(
+					It.IsAny<Request>(),
+					CancellationToken.None
+				)
+			).ReturnsAsync(payload);
 
 			return mock.Object;
 		}

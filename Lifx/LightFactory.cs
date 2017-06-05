@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Lifx.Communication;
 using Lifx.Communication.Requests;
@@ -29,6 +30,11 @@ namespace Lifx
 
 		public async Task<ILight> CreateLightAsync(IPAddress address)
 		{
+			return await CreateLightAsync(address, CancellationToken.None);
+		}
+
+		public async Task<ILight> CreateLightAsync(IPAddress address, CancellationToken cancellationToken)
+		{
 			if (address == null)
 			{
 				throw new ArgumentNullException(nameof(address));
@@ -39,7 +45,7 @@ namespace Lifx
 			var requestFactory = new RequestFactory();
 
 			var request = requestFactory.CreateGetVersionRequest();
-			var payload = await communicator.CommunicateAsync<StateVersionResponsePayload>(request);
+			var payload = await communicator.CommunicateAsync<StateVersionResponsePayload>(request, cancellationToken);
 
 			return new Light(address, payload.Product, payload.Version, communicator, requestFactory);
 		}
