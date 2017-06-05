@@ -19,6 +19,7 @@ namespace Lifx
 		public static int MaxValue { get; } = 9000;
 
 		public static Temperature None { get; } = MinValue;
+		
 		public static Temperature BlueIce { get; } = 9000;
 		public static Temperature BlueWater { get; } = 8500;
 		public static Temperature BlueOvercast { get; } = 8000;
