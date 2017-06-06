@@ -40,12 +40,12 @@ namespace Lifx.Communication
 					cancellationTokenSource.Token
 				))
 				{
-					await SendRequestAsync(request, linkedTokenSource.Token);
+					await SendRequestAsync(request, linkedTokenSource.Token).ConfigureAwait(false);
 
 					if (request.AckRequired)
 					{
 						// Wait for an acknowledgement - response contains an empty payload
-						await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token);
+						await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token).ConfigureAwait(false);
 					}
 				}
 			}
@@ -67,9 +67,10 @@ namespace Lifx.Communication
 					cancellationTokenSource.Token
 				))
 				{
-					await SendRequestAsync(request, linkedTokenSource.Token);
+					await SendRequestAsync(request, linkedTokenSource.Token).ConfigureAwait(false);
 
-					var response = await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token);
+					var response = await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token)
+						.ConfigureAwait(false);
 
 					return (TResponsePayload)response.Payload;
 				}

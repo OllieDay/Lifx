@@ -30,7 +30,7 @@ namespace Lifx
 
 		public async Task<ILight> CreateLightAsync(IPAddress address)
 		{
-			return await CreateLightAsync(address, CancellationToken.None);
+			return await CreateLightAsync(address, CancellationToken.None).ConfigureAwait(false);
 		}
 
 		public async Task<ILight> CreateLightAsync(IPAddress address, CancellationToken cancellationToken)
@@ -45,7 +45,8 @@ namespace Lifx
 			var requestFactory = new RequestFactory();
 
 			var request = requestFactory.CreateGetVersionRequest();
-			var payload = await communicator.CommunicateAsync<StateVersionResponsePayload>(request, cancellationToken);
+			var payload = await communicator.CommunicateAsync<StateVersionResponsePayload>(request, cancellationToken)
+				.ConfigureAwait(false);
 
 			return new Light(address, payload.Product, payload.Version, communicator, requestFactory);
 		}
