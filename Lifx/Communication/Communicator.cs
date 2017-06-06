@@ -29,15 +29,25 @@ namespace Lifx.Communication
 
 		public async Task CommunicateAsync(Request request, CancellationToken cancellationToken)
 		{
-			if (request.AckRequired)
+			// Provide an additional cancellation token that cancels after the response expiry to prevent a deadlock
+			// occurring in the event that the response we are waiting for never arrives (i.e. packet loss). Responses
+			// received after the response expiry has elapsed will be discarded anyway so it's a non-issue to cancel the
+			// task before the caller's cancellation token is cancelled.
+			using (var cancellationTokenSource = new CancellationTokenSource(_responseExpiry))
 			{
-				// Wait for an acknowledgement - response contains an empty payload
-				await CommunicateAsync<ResponsePayload>(request, cancellationToken);
-			}
-			else
-			{
-				// Don't wait for an acknowledgement - fire and forget
-				await SendRequestAsync(request, cancellationToken);
+				using (var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
+					cancellationToken,
+					cancellationTokenSource.Token
+				))
+				{
+					await SendRequestAsync(request, linkedTokenSource.Token);
+
+					if (request.AckRequired)
+					{
+						// Wait for an acknowledgement - response contains an empty payload
+						await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token);
+					}
+				}
 			}
 		}
 
@@ -46,11 +56,24 @@ namespace Lifx.Communication
 			CancellationToken cancellationToken
 		) where TResponsePayload : ResponsePayload
 		{
-			await SendRequestAsync(request, cancellationToken);
+			// Provide an additional cancellation token that cancels after the response expiry to prevent a deadlock
+			// occurring in the event that the response we are waiting for never arrives (i.e. packet loss). Responses
+			// received after the response expiry has elapsed will be discarded anyway so it's a non-issue to cancel the
+			// task before the caller's cancellation token is cancelled.
+			using (var cancellationTokenSource = new CancellationTokenSource(_responseExpiry))
+			{
+				using (var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
+					cancellationToken,
+					cancellationTokenSource.Token
+				))
+				{
+					await SendRequestAsync(request, linkedTokenSource.Token);
 
-			var response = await ReceiveResponseAsync(request.Sequence, cancellationToken);
+					var response = await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token);
 
-			return (TResponsePayload)response.Payload;
+					return (TResponsePayload)response.Payload;
+				}
+			}
 		}
 
 		public void Dispose()

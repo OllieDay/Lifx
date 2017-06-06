@@ -168,3 +168,5 @@ used to cancel a running task.
 * `SetBrightnessAsync(Percentage)`
 * `SetTemperatureAsync(Temperature)`
 * `SetColorAsync(Color)`
+
+_Note: all requests will be cancelled if the device does not respond after 5 seconds._
