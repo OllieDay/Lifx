@@ -21,18 +21,12 @@ namespace Lifx
 		public double Value { get; }
 
 		public static implicit operator double(Percentage percentage)
-		{
-			return percentage.Value;
-		}
+			=> percentage.Value;
 
 		public static implicit operator Percentage(double value)
-		{
-			return new Percentage(value);
-		}
+			=> new Percentage(value);
 
 		public override string ToString()
-		{
-			return Value.ToString();
-		}
+			=> Value.ToString();
 	}
 }

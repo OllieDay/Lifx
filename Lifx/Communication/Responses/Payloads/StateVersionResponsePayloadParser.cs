@@ -14,9 +14,7 @@ namespace Lifx.Communication.Responses.Payloads
 		}
 
 		private static uint ParseVendor(byte[] data)
-		{
-			return data.ToUInt32(startIndex: 0);
-		}
+			=> data.ToUInt32(startIndex: 0);
 
 		private static Product ParseProduct(byte[] data)
 		{
@@ -31,8 +29,6 @@ namespace Lifx.Communication.Responses.Payloads
 		}
 
 		private static uint ParseVersion(byte[] data)
-		{
-			return data.ToUInt32(startIndex: 8);
-		}
+			=> data.ToUInt32(startIndex: 8);
 	}
 }

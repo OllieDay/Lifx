@@ -90,8 +90,6 @@ namespace Lifx.Communication.Responses.Payloads.Tests
 		}
 
 		private static byte[] CombineArrays(params byte[][] arrays)
-		{
-			return arrays.SelectMany(array => array).ToArray();
-		}
+			=> arrays.SelectMany(array => array).ToArray();
 	}
 }

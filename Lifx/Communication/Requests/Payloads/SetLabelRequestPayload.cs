@@ -8,13 +8,9 @@ namespace Lifx.Communication.Requests.Payloads
 		private readonly Label _label;
 
 		public SetLabelRequestPayload(Label label)
-		{
-			_label = label;
-		}
+			=> _label = label;
 
 		public override byte[] GetData()
-		{
-			return Encoding.UTF8.GetBytes(_label);
-		}
+			=> Encoding.UTF8.GetBytes(_label);
 	}
 }

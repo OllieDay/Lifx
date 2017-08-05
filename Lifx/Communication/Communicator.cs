@@ -78,9 +78,7 @@ namespace Lifx.Communication
 		}
 
 		public void Dispose()
-		{
-			_client.Dispose();
-		}
+			=> _client.Dispose();
 
 		private async Task SendRequestAsync(Request request, CancellationToken cancellationToken)
 		{

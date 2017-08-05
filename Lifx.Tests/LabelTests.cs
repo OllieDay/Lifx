@@ -9,8 +9,6 @@ namespace Lifx.Tests
 		[InlineData("000000000000000000000000000000000")]
 		[InlineData("零零零零零零零零零零零")]
 		public void ConstructorShouldThrowArgumentExceptionWhenNumberOfBytesExceedsMaxLength(string value)
-		{
-			Assert.Throws<ArgumentException>(() => new Label(value));
-		}
+			=> Assert.Throws<ArgumentException>(() => new Label(value));
 	}
 }

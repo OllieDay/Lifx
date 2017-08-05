@@ -19,7 +19,7 @@ namespace Lifx
 		public static int MaxValue { get; } = 9000;
 
 		public static Temperature None { get; } = MinValue;
-		
+
 		public static Temperature BlueIce { get; } = 9000;
 		public static Temperature BlueWater { get; } = 8500;
 		public static Temperature BlueOvercast { get; } = 8000;
@@ -40,18 +40,12 @@ namespace Lifx
 		public int Value { get; }
 
 		public static implicit operator int(Temperature temperature)
-		{
-			return temperature.Value;
-		}
+			=> temperature.Value;
 
 		public static implicit operator Temperature(int value)
-		{
-			return new Temperature(value);
-		}
+			=> new Temperature(value);
 
 		public override string ToString()
-		{
-			return Value.ToString();
-		}
+			=> Value.ToString();
 	}
 }

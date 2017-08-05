@@ -191,9 +191,7 @@ namespace Lifx.Communication.Requests
 		}
 
 		private static byte[] CombineArrays(params byte[][] arrays)
-		{
-			return arrays.SelectMany(array => array).ToArray();
-		}
+			=> arrays.SelectMany(array => array).ToArray();
 
 		private byte[] GetFrameData()
 		{
@@ -283,8 +281,6 @@ namespace Lifx.Communication.Requests
 		}
 
 		private byte[] GetCommandData()
-		{
-			return ((ushort)Command).GetBytes();
-		}
+			=> ((ushort)Command).GetBytes();
 	}
 }

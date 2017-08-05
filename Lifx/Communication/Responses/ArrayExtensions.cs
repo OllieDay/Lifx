@@ -6,18 +6,12 @@ namespace Lifx.Communication.Responses
 	internal static class ArrayExtensions
 	{
 		public static ushort ToUInt16(this byte[] @this, int startIndex)
-		{
-			return BitConverter.ToUInt16(@this, startIndex);
-		}
+			=> BitConverter.ToUInt16(@this, startIndex);
 
 		public static uint ToUInt32(this byte[] @this, int startIndex)
-		{
-			return BitConverter.ToUInt32(@this, startIndex);
-		}
+			=> BitConverter.ToUInt32(@this, startIndex);
 
 		public static ulong ToUInt64(this byte[] @this, int startIndex)
-		{
-			return BitConverter.ToUInt64(@this, startIndex);
-		}
+			=> BitConverter.ToUInt64(@this, startIndex);
 	}
 }

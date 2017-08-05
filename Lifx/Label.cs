@@ -27,18 +27,12 @@ namespace Lifx
 		public string Value { get; }
 
 		public static implicit operator string(Label label)
-		{
-			return label.Value;
-		}
+			=> label.Value;
 
 		public static implicit operator Label(string value)
-		{
-			return new Label(value);
-		}
+			=> new Label(value);
 
 		public override string ToString()
-		{
-			return Value;
-		}
+			=> Value;
 	}
 }

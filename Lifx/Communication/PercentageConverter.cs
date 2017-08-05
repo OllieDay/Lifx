@@ -7,14 +7,10 @@ namespace Lifx.Communication
 	{
 		// Convert from value used by light (0 to 65535).
 		public static Percentage ConvertUInt16ToPercentage(ushort value)
-		{
-			return value / (double)ushort.MaxValue;
-		}
+			=> value / (double)ushort.MaxValue;
 
 		// Convert to value used by light (0 to 65535).
 		public static ushort ConvertPercentageToUInt16(Percentage percentage)
-		{
-			return (ushort)Math.Round(percentage * ushort.MaxValue);
-		}
+			=> (ushort)Math.Round(percentage * ushort.MaxValue);
 	}
 }

@@ -21,18 +21,12 @@ namespace Lifx
 		public int Value { get; }
 
 		public static implicit operator int(Hue hue)
-		{
-			return hue.Value;
-		}
+			=> hue.Value;
 
 		public static implicit operator Hue(int value)
-		{
-			return new Hue(value);
-		}
+			=> new Hue(value);
 
 		public override string ToString()
-		{
-			return Value.ToString();
-		}
+			=> Value.ToString();
 	}
 }

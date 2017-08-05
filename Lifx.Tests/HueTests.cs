@@ -9,8 +9,6 @@ namespace Lifx.Tests
 		[InlineData(-1)]
 		[InlineData(361)]
 		public void ConstructorShouldThrowArgumentOutOfRangeExceptionWhenValueNotInRange(int value)
-		{
-			Assert.Throws<ArgumentOutOfRangeException>(() => new Hue(value));
-		}
+			=> Assert.Throws<ArgumentOutOfRangeException>(() => new Hue(value));
 	}
 }

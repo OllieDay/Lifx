@@ -46,14 +46,10 @@ namespace Lifx.Communication.Responses.Payloads
 		}
 
 		private static Temperature ParseTemperature(byte[] data)
-		{
-			return data.ToUInt16(startIndex: 6);
-		}
+			=> data.ToUInt16(startIndex: 6);
 
 		private static Power ParsePower(byte[] data)
-		{
-			return (Power)data.ToUInt16(startIndex: 10);
-		}
+			=> (Power)data.ToUInt16(startIndex: 10);
 
 		private static Label ParseLabel(byte[] data)
 		{

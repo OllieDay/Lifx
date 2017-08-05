@@ -66,9 +66,7 @@ namespace Lifx.Communication.Responses
 		}
 
 		private static Command ParseCommand(byte[] data)
-		{
-			return (Command)data.ToUInt16(startIndex: 32);
-		}
+			=> (Command)data.ToUInt16(startIndex: 32);
 
 		private static byte[] ParsePayloadData(byte[] data)
 		{

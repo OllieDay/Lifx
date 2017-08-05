@@ -18,8 +18,6 @@ namespace Lifx
 		};
 
 		public static bool SupportsColor(this Product @this)
-		{
-			return ColorProducts.Contains(@this);
-		}
+			=> ColorProducts.Contains(@this);
 	}
 }

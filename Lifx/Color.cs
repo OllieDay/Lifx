@@ -25,8 +25,6 @@
 		public Percentage Saturation { get; }
 
 		public override string ToString()
-		{
-			return $"[Hue: {Hue}; Saturation: {Saturation}]";
-		}
+			=> $"[Hue: {Hue}; Saturation: {Saturation}]";
 	}
 }

@@ -22,16 +22,12 @@ namespace Lifx
 		private readonly int _port;
 
 		public LightFactory(int port)
-		{
-			_port = port;
-		}
+			=> _port = port;
 
 		public LightFactory() : this(DefaultPort) { }
 
 		public async Task<ILight> CreateLightAsync(IPAddress address)
-		{
-			return await CreateLightAsync(address, CancellationToken.None).ConfigureAwait(false);
-		}
+			=> await CreateLightAsync(address, CancellationToken.None).ConfigureAwait(false);
 
 		public async Task<ILight> CreateLightAsync(IPAddress address, CancellationToken cancellationToken)
 		{
