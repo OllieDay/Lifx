@@ -106,10 +106,12 @@ namespace Lifx
 			=> await SetBrightnessAsync(brightness, CancellationToken.None).ConfigureAwait(false);
 
 		public async Task SetBrightnessAsync(Percentage brightness, CancellationToken cancellationToken)
-			=> await SetBrightnessAsync(brightness, DefaultDurationInMilliseconds, cancellationToken).ConfigureAwait(false);
+			=> await SetBrightnessAsync(brightness, DefaultDurationInMilliseconds, cancellationToken)
+				.ConfigureAwait(false);
 
 		public async Task SetBrightnessAsync(Percentage brightness, uint durationInMilliseconds)
-			=> await SetBrightnessAsync(brightness, durationInMilliseconds, CancellationToken.None).ConfigureAwait(false);
+			=> await SetBrightnessAsync(brightness, durationInMilliseconds, CancellationToken.None)
+				.ConfigureAwait(false);
 
 		public async Task SetBrightnessAsync(
 			Percentage brightness,
@@ -132,10 +134,12 @@ namespace Lifx
 			=> await SetTemperatureAsync(temperature, CancellationToken.None).ConfigureAwait(false);
 
 		public async Task SetTemperatureAsync(Temperature temperature, CancellationToken cancellationToken)
-			=> await SetTemperatureAsync(temperature, DefaultDurationInMilliseconds, cancellationToken).ConfigureAwait(false);
+			=> await SetTemperatureAsync(temperature, DefaultDurationInMilliseconds, cancellationToken)
+				.ConfigureAwait(false);
 
 		public async Task SetTemperatureAsync(Temperature temperature, uint durationInMilliseconds)
-			=> await SetTemperatureAsync(temperature, durationInMilliseconds, CancellationToken.None).ConfigureAwait(false);
+			=> await SetTemperatureAsync(temperature, durationInMilliseconds, CancellationToken.None)
+				.ConfigureAwait(false);
 
 		public async Task SetTemperatureAsync(
 			Temperature temperature,

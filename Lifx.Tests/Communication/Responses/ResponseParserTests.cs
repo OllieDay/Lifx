@@ -73,11 +73,15 @@ namespace Lifx.Communication.Responses.Tests
 
 		[Fact]
 		public void TryParseResponseShouldInitializeResponsePayloadWhenCommandIsDeviceAcknowledgement()
-			=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<ResponsePayload>(Command.DeviceAcknowledgement);
+			=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<ResponsePayload>(
+				Command.DeviceAcknowledgement
+			);
 
 		[Fact]
 		public void TryParseResponseShouldInitializeResponsePayloadWhenCommandIsDeviceStateVersion()
-			=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<StateVersionResponsePayload>(Command.DeviceStateVersion);
+			=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<StateVersionResponsePayload>(
+				Command.DeviceStateVersion
+			);
 
 		[Fact]
 		public void TryParseResponseShouldInitializeResponsePayloadWhenCommandIsLightState()
