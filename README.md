@@ -8,6 +8,19 @@ All communication is done over UDP for low-latency device control using the LIFX
 See [https://lan.developer.lifx.com/docs](https://lan.developer.lifx.com/docs) for more information about the LIFX LAN
 Protocol.
 
+## Getting started
+Install the NuGet package into your application.
+
+### Package Manager
+```
+Install-Package Lifx
+```
+
+### .NET CLI
+```
+dotnet add package Lifx
+```
+
 ## Device creation
 The `LightFactory` class provides functionality for creating `ILight` objects from a given IP address. The `ILight`
 object contains the IP address, product (i.e. model) and version of the device and is used for all control operations.
