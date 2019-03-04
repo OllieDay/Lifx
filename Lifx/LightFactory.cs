@@ -41,10 +41,20 @@ namespace Lifx
 			var requestFactory = new RequestFactory();
 
 			var request = requestFactory.CreateGetVersionRequest();
-			var payload = await communicator.CommunicateAsync<StateVersionResponsePayload>(request, cancellationToken)
-				.ConfigureAwait(false);
 
-			return new Light(address, payload.Product, payload.Version, communicator, requestFactory);
+			try
+			{
+				var payload = await communicator.CommunicateAsync<StateVersionResponsePayload>(request, cancellationToken)
+					.ConfigureAwait(false);
+
+				return new Light(address, payload.Product, payload.Version, communicator, requestFactory);
+			}
+			catch
+			{
+				communicator.Dispose();
+
+				throw;
+			}
 		}
 	}
 }
