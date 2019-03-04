@@ -6,7 +6,7 @@
     <Authors>Ollie Day</Authors>
     <Title>Lifx</Title>
     <Description>Library for controlling LIFX Wi-Fi Smart LED devices.</Description>
-    <Copyright>Copyright 2017-2018 (c) Ollie Day</Copyright>
+    <Copyright>Copyright 2017-2019 (c) Ollie Day</Copyright>
     <PackageTags>LIFX</PackageTags>
     <PackageLicenseUrl>https://github.com/OllieDay/Lifx/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/OllieDay/Lifx</PackageProjectUrl>
