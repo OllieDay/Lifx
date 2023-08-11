@@ -12,17 +12,12 @@ namespace Lifx.Communication.Responses.Tests
 		{
 			get
 			{
-				var mock = new Mock<IResponsePayloadParser<StateVersionResponsePayload>>();
+				var mock = Substitute.For<IResponsePayloadParser<StateVersionResponsePayload>>();
 
-				mock.Setup(parser => parser.Parse(It.IsAny<byte[]>()))
-					.Returns(new StateVersionResponsePayload(
-						It.IsAny<uint>(),
-						It.IsAny<Product>(),
-						It.IsAny<uint>()
-					)
-				);
+				mock.Parse(Arg.Any<byte[]>())
+					.Returns(new StateVersionResponsePayload(0, Product.Unknown, 0));
 
-				return mock.Object;
+				return mock;
 			}
 		}
 
@@ -30,19 +25,18 @@ namespace Lifx.Communication.Responses.Tests
 		{
 			get
 			{
-				var mock = new Mock<IResponsePayloadParser<StateResponsePayload>>();
+				var mock = Substitute.For<IResponsePayloadParser<StateResponsePayload>>();
 
-				mock.Setup(parser => parser.Parse(It.IsAny<byte[]>()))
+				mock.Parse(Arg.Any<byte[]>())
 					.Returns(new StateResponsePayload(
-						It.IsAny<Color>(),
-						It.IsAny<Percentage>(),
-						It.IsAny<Temperature>(),
-						It.IsAny<Power>(),
-						It.IsAny<Label>()
-					)
-				);
+						Color.None,
+						Percentage.MinValue,
+						Temperature.None,
+						Power.Off,
+						Label.None
+					));
 
-				return mock.Object;
+				return mock;
 			}
 		}
 

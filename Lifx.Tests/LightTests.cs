@@ -11,126 +11,134 @@ namespace Lifx.Tests
 		public async Task SetBrightnessAsyncShouldUseCurrentColorAndTemperature()
 		{
 			var color = Color.Cyan;
+			var brightness = Percentage.MaxValue;
 			var temperature = Temperature.Neutral;
 
 			var communicator = CreateCommunicator(
 				new StateResponsePayload(
 					color,
-					It.IsAny<Percentage>(),
+					brightness,
 					temperature,
-					It.IsAny<Power>(),
-					It.IsAny<Label>()
+					Power.On,
+					Label.None
 				)
 			);
 
-			var requestFactoryMock = new Mock<IRequestFactory>();
+			var requestFactoryMock = Substitute.For<IRequestFactory>();
 
-			using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock.Object))
+			using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock))
 			{
-				await light.SetBrightnessAsync(It.IsAny<Percentage>());
+				await light.SetBrightnessAsync(brightness);
 			}
 
-			requestFactoryMock.Verify(
-				requestFactory => requestFactory.CreateSetColorRequest(
+			requestFactoryMock
+				.Received()
+				.CreateSetColorRequest(
 					color,
-					It.IsAny<Percentage>(),
+					Arg.Any<Percentage>(),
 					temperature,
-					It.IsAny<uint>()
-				)
-			);
+					Arg.Any<uint>()
+				);
 		}
 
 		[Fact]
 		public async Task SetTemperatureAsyncShouldUseColorNone()
 		{
+			var temperature = Temperature.Neutral;
+
 			var communicator = CreateCommunicator(
 				new StateResponsePayload(
-					It.IsAny<Color>(),
-					It.IsAny<Percentage>(),
-					It.IsAny<Temperature>(),
-					It.IsAny<Power>(),
-					It.IsAny<Label>()
+					Color.Cyan,
+					Percentage.MaxValue,
+					temperature,
+					Power.On,
+					Label.None
 				)
 			);
-			var requestFactoryMock = new Mock<IRequestFactory>();
 
-			using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock.Object))
+			var requestFactoryMock = Substitute.For<IRequestFactory>();
+
+			using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock))
 			{
-				await light.SetTemperatureAsync(It.IsAny<Temperature>());
+				await light.SetTemperatureAsync(temperature);
 			}
 
-			requestFactoryMock.Verify(
-				requestFactory => requestFactory.CreateSetColorRequest(
+			requestFactoryMock
+				.Received()
+				.CreateSetColorRequest(
 					Color.None,
-					It.IsAny<Percentage>(),
-					It.IsAny<Temperature>(),
-					It.IsAny<uint>()
-				)
-			);
+					Arg.Any<Percentage>(),
+					Arg.Any<Temperature>(),
+					Arg.Any<uint>()
+				);
 		}
 
 		[Fact]
 		public async Task SetTemperatureAsyncShouldUseCurrentBrightness()
 		{
 			var brightness = Percentage.MaxValue;
+			var temperature = Temperature.Neutral;
 
 			var communicator = CreateCommunicator(
 				new StateResponsePayload(
-					It.IsAny<Color>(),
+					Color.Cyan,
 					brightness,
-					It.IsAny<Temperature>(),
-					It.IsAny<Power>(),
-					It.IsAny<Label>()
+					temperature,
+					Power.On,
+					Label.None
 				)
 			);
 
-			var requestFactoryMock = new Mock<IRequestFactory>();
+			var requestFactoryMock = Substitute.For<IRequestFactory>();
 
-			using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock.Object))
+			using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock))
 			{
-				await light.SetTemperatureAsync(It.IsAny<Temperature>());
+				await light.SetTemperatureAsync(temperature);
 			}
 
-			requestFactoryMock.Verify(
-				requestFactory => requestFactory.CreateSetColorRequest(
-					It.IsAny<Color>(),
+			requestFactoryMock
+				.Received()
+				.CreateSetColorRequest(
+					Arg.Any<Color>(),
 					brightness,
-					It.IsAny<Temperature>(),
-					It.IsAny<uint>()
-				)
-			);
+					Arg.Any<Temperature>(),
+					Arg.Any<uint>()
+				);
 		}
 
 		[Fact]
 		public async Task SetColorAsyncShouldUseCurrentBrightnessAndTemperature()
 		{
+			var color = Color.Cyan;
 			var brightness = Percentage.MaxValue;
 			var temperature = Temperature.Neutral;
 
 			var communicator = CreateCommunicator(
 				new StateResponsePayload(
-					It.IsAny<Color>(),
+					color,
 					brightness,
 					temperature,
-					It.IsAny<Power>(),
-					It.IsAny<Label>()
+					Power.On,
+					Label.None
 				)
 			);
-			var requestFactoryMock = new Mock<IRequestFactory>();
 
-			using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock.Object))
+			var requestFactoryMock = Substitute.For<IRequestFactory>();
+
+			using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock))
 			{
-				await light.SetColorAsync(It.IsAny<Color>());
+				await light.SetColorAsync(color);
 			}
 
-			requestFactoryMock.Verify(
-				requestFactory => requestFactory.CreateSetColorRequest(
-					It.IsAny<Color>(),
+
+			requestFactoryMock
+				.Received()
+				.CreateSetColorRequest(
+					color,
 					brightness,
 					temperature,
-					It.IsAny<uint>()
-				)
-			);
+					Arg.Any<uint>()
+				);
 		}
 
 		[Theory]
@@ -143,7 +151,7 @@ namespace Lifx.Tests
 			{
 				Assert.ThrowsAnyAsync<InvalidOperationException>(async () =>
 				{
-					await light.SetColorAsync(It.IsAny<Color>());
+					await light.SetColorAsync(Color.Cyan);
 				});
 			}
 		}
@@ -161,16 +169,14 @@ namespace Lifx.Tests
 
 		private static ICommunicator CreateCommunicator(StateResponsePayload payload)
 		{
-			var mock = new Mock<ICommunicator>();
+			var mock = Substitute.For<ICommunicator>();
+			
+			mock.CommunicateAsync<StateResponsePayload>(
+				Arg.Any<Request>(),
+				Arg.Any<CancellationToken>()
+			).Returns(Task.FromResult(payload));
 
-			mock.Setup(
-				communicator => communicator.CommunicateAsync<StateResponsePayload>(
-					It.IsAny<Request>(),
-					CancellationToken.None
-				)
-			).ReturnsAsync(payload);
-
-			return mock.Object;
+			return mock;
 		}
 
 		private static ILight CreateLight(
@@ -181,8 +187,8 @@ namespace Lifx.Tests
 			IRequestFactory requestFactory = null
 		)
 		{
-			communicator =  communicator ?? Mock.Of<ICommunicator>();
-			requestFactory = requestFactory ?? Mock.Of<IRequestFactory>();
+			communicator = communicator ?? Substitute.For<ICommunicator>();
+			requestFactory = requestFactory ?? Substitute.For<IRequestFactory>();
 			address = address ?? IPAddress.Any;
 
 			return new Light(address, product, version, communicator, requestFactory);
