@@ -1,9 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Xunit;
-
 namespace Lifx.Communication.Tests
 {
 	public sealed class TaskExtensionsTests

@@ -1,7 +1,4 @@
-using FluentAssertions;
-using Lifx.Communication.Requests.Payloads;
 using Lifx.Communication.Responses;
-using Xunit;
 
 namespace Lifx.Communication.Requests.Payloads.Tests
 {

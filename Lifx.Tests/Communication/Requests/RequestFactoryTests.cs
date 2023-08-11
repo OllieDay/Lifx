@@ -1,8 +1,4 @@
-using System;
-using System.Net;
-using FluentAssertions;
 using Lifx.Communication.Requests.Payloads;
-using Xunit;
 
 namespace Lifx.Communication.Requests.Tests
 {

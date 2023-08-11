@@ -1,6 +1,3 @@
-using FluentAssertions;
-using Xunit;
-
 namespace Lifx.Tests
 {
 	public sealed class LightStateTests

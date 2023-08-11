@@ -1,13 +1,7 @@
-using System;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentAssertions;
 using Lifx.Communication;
 using Lifx.Communication.Requests;
 using Lifx.Communication.Responses.Payloads;
-using Moq;
-using Xunit;
 
 namespace Lifx.Tests
 {

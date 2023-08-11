@@ -1,8 +1,5 @@
-using System.Linq;
 using System.Text;
-using FluentAssertions;
 using Lifx.Communication.Requests;
-using Xunit;
 
 namespace Lifx.Communication.Responses.Payloads.Tests
 {
