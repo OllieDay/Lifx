@@ -1,98 +1,97 @@
 using Lifx.Communication.Requests;
 using Lifx.Communication.Responses.Payloads;
 
-namespace Lifx.Communication.Responses.Tests
+namespace Lifx.Communication.Responses.Tests;
+
+public sealed class ResponseParserTests
 {
-	public sealed class ResponseParserTests
+	private const int ResponseLength = 36;
+	private const int CommandOffset = 32;
+
+	private static IResponsePayloadParser<StateVersionResponsePayload> StateVersionResponsePayloadParser
 	{
-		private const int ResponseLength = 36;
-		private const int CommandOffset = 32;
-
-		private static IResponsePayloadParser<StateVersionResponsePayload> StateVersionResponsePayloadParser
+		get
 		{
-			get
-			{
-				var mock = Substitute.For<IResponsePayloadParser<StateVersionResponsePayload>>();
+			var mock = Substitute.For<IResponsePayloadParser<StateVersionResponsePayload>>();
 
-				mock.Parse(Arg.Any<byte[]>())
-					.Returns(new StateVersionResponsePayload(0, Product.Unknown, 0));
+			mock.Parse(Arg.Any<byte[]>())
+				.Returns(new StateVersionResponsePayload(0, Product.Unknown, 0));
 
-				return mock;
-			}
+			return mock;
 		}
+	}
 
-		private static IResponsePayloadParser<StateResponsePayload> StateResponsePayloadParser
+	private static IResponsePayloadParser<StateResponsePayload> StateResponsePayloadParser
+	{
+		get
 		{
-			get
-			{
-				var mock = Substitute.For<IResponsePayloadParser<StateResponsePayload>>();
+			var mock = Substitute.For<IResponsePayloadParser<StateResponsePayload>>();
 
-				mock.Parse(Arg.Any<byte[]>())
-					.Returns(new StateResponsePayload(
-						Color.None,
-						Percentage.MinValue,
-						Temperature.None,
-						Power.Off,
-						Label.None
-					));
+			mock.Parse(Arg.Any<byte[]>())
+				.Returns(new StateResponsePayload(
+					Color.None,
+					Percentage.MinValue,
+					Temperature.None,
+					Power.Off,
+					Label.None
+				));
 
-				return mock;
-			}
+			return mock;
 		}
+	}
 
-		private static ResponseParser ResponseParser
-			=> new ResponseParser(StateVersionResponsePayloadParser, StateResponsePayloadParser);
+	private static ResponseParser ResponseParser
+		=> new ResponseParser(StateVersionResponsePayloadParser, StateResponsePayloadParser);
 
-		[Fact]
-		public void TryParseResponseShouldReturnFalseWhenDataLengthIsLessThanResponseLength()
-		{
-			var data = new byte[ResponseLength - 1];
+	[Fact]
+	public void TryParseResponseShouldReturnFalseWhenDataLengthIsLessThanResponseLength()
+	{
+		var data = new byte[ResponseLength - 1];
 
-			ResponseParser.TryParseResponse(data, out var response).Should().BeFalse();
-		}
+		ResponseParser.TryParseResponse(data, out var response).Should().BeFalse();
+	}
 
-		[Fact]
-		public void TryParseResponseShouldReturnFalseWhenCommandIsInvalid()
-		{
-			var invalidCommand = (Command)0;
-			var data = CreateResponseDataWithCommand(invalidCommand);
+	[Fact]
+	public void TryParseResponseShouldReturnFalseWhenCommandIsInvalid()
+	{
+		var invalidCommand = (Command)0;
+		var data = CreateResponseDataWithCommand(invalidCommand);
 
-			ResponseParser.TryParseResponse(data, out var response).Should().BeFalse();
-		}
+		ResponseParser.TryParseResponse(data, out var response).Should().BeFalse();
+	}
 
-		[Fact]
-		public void TryParseResponseShouldInitializeResponsePayloadWhenCommandIsDeviceAcknowledgement()
-			=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<ResponsePayload>(
-				Command.DeviceAcknowledgement
-			);
+	[Fact]
+	public void TryParseResponseShouldInitializeResponsePayloadWhenCommandIsDeviceAcknowledgement()
+		=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<ResponsePayload>(
+			Command.DeviceAcknowledgement
+		);
 
-		[Fact]
-		public void TryParseResponseShouldInitializeResponsePayloadWhenCommandIsDeviceStateVersion()
-			=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<StateVersionResponsePayload>(
-				Command.DeviceStateVersion
-			);
+	[Fact]
+	public void TryParseResponseShouldInitializeResponsePayloadWhenCommandIsDeviceStateVersion()
+		=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<StateVersionResponsePayload>(
+			Command.DeviceStateVersion
+		);
 
-		[Fact]
-		public void TryParseResponseShouldInitializeResponsePayloadWhenCommandIsLightState()
-			=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<StateResponsePayload>(Command.LightState);
+	[Fact]
+	public void TryParseResponseShouldInitializeResponsePayloadWhenCommandIsLightState()
+		=> TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<StateResponsePayload>(Command.LightState);
 
-		private void TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<TResponsePayload>(Command command)
-		{
-			var data = CreateResponseDataWithCommand(command);
+	private void TryParseResponseShouldInitializeResponsePayloadToSpecifiedType<TResponsePayload>(Command command)
+	{
+		var data = CreateResponseDataWithCommand(command);
 
-			ResponseParser.TryParseResponse(data, out var response);
+		ResponseParser.TryParseResponse(data, out var response);
 
-			response.Payload.Should().BeOfType<TResponsePayload>();
-		}
+		response.Payload.Should().BeOfType<TResponsePayload>();
+	}
 
-		private static byte[] CreateResponseDataWithCommand(Command command)
-		{
-			var data = new byte[ResponseLength];
-			var commandData = ((ushort)command).GetBytes();
+	private static byte[] CreateResponseDataWithCommand(Command command)
+	{
+		var data = new byte[ResponseLength];
+		var commandData = ((ushort)command).GetBytes();
 
-			Array.Copy(commandData, 0, data, CommandOffset, commandData.Length);
+		Array.Copy(commandData, 0, data, CommandOffset, commandData.Length);
 
-			return data;
-		}
+		return data;
 	}
 }

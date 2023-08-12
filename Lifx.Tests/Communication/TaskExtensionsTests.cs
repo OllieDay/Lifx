@@ -1,27 +1,26 @@
-namespace Lifx.Communication.Tests
+namespace Lifx.Communication.Tests;
+
+public sealed class TaskExtensionsTests
 {
-	public sealed class TaskExtensionsTests
+	[Fact]
+	public void WithCancellationShouldCauseTaskToThrowOperationCanceledExceptionWhenCancellationTokenIsCancelled()
 	{
-		[Fact]
-		public void WithCancellationShouldCauseTaskToThrowOperationCanceledExceptionWhenCancellationTokenIsCancelled()
+		using (var cancellationTokenSource = new CancellationTokenSource())
 		{
-			using (var cancellationTokenSource = new CancellationTokenSource())
+			cancellationTokenSource.Cancel();
+
+			Assert.ThrowsAsync<OperationCanceledException>(async () =>
 			{
-				cancellationTokenSource.Cancel();
-
-				Assert.ThrowsAsync<OperationCanceledException>(async () =>
+				// Will never complete
+				Func<object> function = () =>
 				{
-					// Will never complete
-					Func<object> function = () =>
-					{
-						Task.Delay(Timeout.InfiniteTimeSpan).GetAwaiter().GetResult();
+					Task.Delay(Timeout.InfiniteTimeSpan).GetAwaiter().GetResult();
 
-						return null;
-					};
+					return null;
+				};
 
-					await Task.Run(function).WithCancellation(cancellationTokenSource.Token);
-				});
-			}
+				await Task.Run(function).WithCancellation(cancellationTokenSource.Token);
+			});
 		}
 	}
 }

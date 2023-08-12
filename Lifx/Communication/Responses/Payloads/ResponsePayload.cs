@@ -1,8 +1,7 @@
-﻿namespace Lifx.Communication.Responses.Payloads
+﻿namespace Lifx.Communication.Responses.Payloads;
+
+// Contains information pertaining to a response.
+internal class ResponsePayload
 {
-	// Contains information pertaining to a response.
-	internal class ResponsePayload
-	{
-		public static ResponsePayload Empty { get; } = new ResponsePayload();
-	}
+	public static ResponsePayload Empty { get; } = new ResponsePayload();
 }
