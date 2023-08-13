@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Lifx.Communication.Responses;
+﻿namespace Lifx.Communication.Responses;
 
 // Convert byte array to ushort, uint and ulong at the specified start index.
 internal static class ArrayExtensions

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace Lifx;
 
 // Represents a light label with a maximum of 32 bytes in length.
-public struct Label
+public readonly record struct Label
 {
 	public Label(string value)
 	{

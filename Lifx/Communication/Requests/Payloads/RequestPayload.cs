@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
-
-namespace Lifx.Communication.Requests.Payloads;
+﻿namespace Lifx.Communication.Requests.Payloads;
 
 // Contains information pertaining to a request.
-internal class RequestPayload
+internal record RequestPayload
 {
 	public static RequestPayload Empty { get; } = new RequestPayload();
 

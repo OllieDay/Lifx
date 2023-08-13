@@ -3,13 +3,8 @@
 namespace Lifx.Communication.Requests.Payloads;
 
 // Contains information used to set a light's label.
-internal sealed class SetLabelRequestPayload : RequestPayload
+internal sealed record SetLabelRequestPayload(Label Label) : RequestPayload
 {
-	private readonly Label _label;
-
-	public SetLabelRequestPayload(Label label)
-		=> _label = label;
-
 	public override byte[] GetData()
-		=> Encoding.UTF8.GetBytes(_label);
+		=> Encoding.UTF8.GetBytes(Label);
 }

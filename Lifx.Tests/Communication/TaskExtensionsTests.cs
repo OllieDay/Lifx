@@ -5,22 +5,20 @@ public sealed class TaskExtensionsTests
 	[Fact]
 	public void WithCancellationShouldCauseTaskToThrowOperationCanceledExceptionWhenCancellationTokenIsCancelled()
 	{
-		using (var cancellationTokenSource = new CancellationTokenSource())
+		using var cancellationTokenSource = new CancellationTokenSource();
+		cancellationTokenSource.Cancel();
+
+		Assert.ThrowsAsync<OperationCanceledException>(async () =>
 		{
-			cancellationTokenSource.Cancel();
-
-			Assert.ThrowsAsync<OperationCanceledException>(async () =>
+			// Will never complete
+			static object? Function()
 			{
-				// Will never complete
-				Func<object> function = () =>
-				{
-					Task.Delay(Timeout.InfiniteTimeSpan).GetAwaiter().GetResult();
+				Task.Delay(Timeout.InfiniteTimeSpan).GetAwaiter().GetResult();
 
-					return null;
-				};
+				return null;
+			}
 
-				await Task.Run(function).WithCancellation(cancellationTokenSource.Token);
-			});
-		}
+			await Task.Run(Function).WithCancellation(cancellationTokenSource.Token);
+		});
 	}
 }

@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Lifx;
+﻿namespace Lifx;
 
 // Represents a percentage value from 0 to 1.
-public struct Percentage
+public readonly record struct Percentage
 {
 	public Percentage(double value)
 	{

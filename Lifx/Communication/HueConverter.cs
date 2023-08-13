@@ -1,5 +1,3 @@
-using System;
-
 namespace Lifx.Communication;
 
 // Convert to and from value used by light.

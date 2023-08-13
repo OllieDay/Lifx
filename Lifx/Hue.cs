@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Lifx;
+﻿namespace Lifx;
 
 // Represents a hue value from 0 to 360.
-public struct Hue
+public readonly record struct Hue
 {
 	public Hue(int value)
 	{

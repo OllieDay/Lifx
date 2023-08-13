@@ -1,5 +1,3 @@
-using System;
-
 namespace Lifx.Communication.Requests;
 
 // Convert ushort, uint and ulong to byte array.

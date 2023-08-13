@@ -1,5 +1,3 @@
-using System;
-
 namespace Lifx.Communication.Responses.Payloads;
 
 internal sealed class StateVersionResponsePayloadParser : IResponsePayloadParser<StateVersionResponsePayload>

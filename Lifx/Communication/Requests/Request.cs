@@ -1,4 +1,3 @@
-using System.Linq;
 using Lifx.Communication.Requests.Payloads;
 
 namespace Lifx.Communication.Requests;
@@ -151,35 +150,16 @@ namespace Lifx.Communication.Requests;
 // which means that dumping serialized data structures or viewing network
 // packet sniffing may show the content of numeric fields in reversed
 // byte-order.
-internal sealed class Request
+internal sealed record Request(
+	Command Command,
+	bool AckRequired,
+	bool ResRequired,
+	byte Sequence,
+	uint Source,
+	ulong Target,
+	RequestPayload Payload
+)
 {
-	public Request(
-		Command command,
-		bool ackRequired,
-		bool resRequired,
-		byte sequence,
-		uint source,
-		ulong target,
-		RequestPayload payload
-	)
-	{
-		Command = command;
-		AckRequired = ackRequired;
-		ResRequired = resRequired;
-		Sequence = sequence;
-		Source = source;
-		Target = target;
-		Payload = payload;
-	}
-
-	public Command Command { get; }
-	public bool AckRequired { get; }
-	public bool ResRequired { get; }
-	public byte Sequence { get; }
-	public uint Source { get; }
-	public ulong Target { get; }
-	public RequestPayload Payload { get; }
-
 	public byte[] GetData()
 	{
 		var frameData = GetFrameData();

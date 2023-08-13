@@ -44,20 +44,20 @@ public sealed class ResponseParserTests
 		=> new ResponseParser(StateVersionResponsePayloadParser, StateResponsePayloadParser);
 
 	[Fact]
-	public void TryParseResponseShouldReturnFalseWhenDataLengthIsLessThanResponseLength()
+	public void TryParseResponseShouldReturnNullWhenDataLengthIsLessThanResponseLength()
 	{
 		var data = new byte[ResponseLength - 1];
 
-		ResponseParser.TryParseResponse(data, out var response).Should().BeFalse();
+		ResponseParser.TryParseResponse(data).Should().BeNull();
 	}
 
 	[Fact]
-	public void TryParseResponseShouldReturnFalseWhenCommandIsInvalid()
+	public void TryParseResponseShouldReturnNullWhenCommandIsInvalid()
 	{
 		var invalidCommand = (Command)0;
 		var data = CreateResponseDataWithCommand(invalidCommand);
 
-		ResponseParser.TryParseResponse(data, out var response).Should().BeFalse();
+		ResponseParser.TryParseResponse(data).Should().BeNull();
 	}
 
 	[Fact]
@@ -80,9 +80,9 @@ public sealed class ResponseParserTests
 	{
 		var data = CreateResponseDataWithCommand(command);
 
-		ResponseParser.TryParseResponse(data, out var response);
+		var response = ResponseParser.TryParseResponse(data);
 
-		response.Payload.Should().BeOfType<TResponsePayload>();
+		response!.Payload.Should().BeOfType<TResponsePayload>();
 	}
 
 	private static byte[] CreateResponseDataWithCommand(Command command)

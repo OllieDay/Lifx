@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 using Lifx.Communication.Requests;
 using Lifx.Communication.Responses;
 using Lifx.Communication.Responses.Payloads;
@@ -31,21 +28,17 @@ internal sealed class Communicator : ICommunicator
 		// occurring in the event that the response we are waiting for never arrives (i.e. packet loss). Responses
 		// received after the response expiry has elapsed will be discarded anyway so it's a non-issue to cancel the
 		// task before the caller's cancellation token is cancelled.
-		using (var cancellationTokenSource = new CancellationTokenSource(_responseExpiry))
-		{
-			using (var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
-				cancellationToken,
-				cancellationTokenSource.Token
-			))
-			{
-				await SendRequestAsync(request, linkedTokenSource.Token).ConfigureAwait(false);
+		using var cancellationTokenSource = new CancellationTokenSource(_responseExpiry);
+		using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
+			cancellationToken,
+			cancellationTokenSource.Token
+		);
+		await SendRequestAsync(request, linkedTokenSource.Token).ConfigureAwait(false);
 
-				if (request.AckRequired)
-				{
-					// Wait for an acknowledgement - response contains an empty payload
-					await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token).ConfigureAwait(false);
-				}
-			}
+		if (request.AckRequired)
+		{
+			// Wait for an acknowledgement - response contains an empty payload
+			await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token).ConfigureAwait(false);
 		}
 	}
 
@@ -58,21 +51,17 @@ internal sealed class Communicator : ICommunicator
 		// occurring in the event that the response we are waiting for never arrives (i.e. packet loss). Responses
 		// received after the response expiry has elapsed will be discarded anyway so it's a non-issue to cancel the
 		// task before the caller's cancellation token is cancelled.
-		using (var cancellationTokenSource = new CancellationTokenSource(_responseExpiry))
-		{
-			using (var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
-				cancellationToken,
-				cancellationTokenSource.Token
-			))
-			{
-				await SendRequestAsync(request, linkedTokenSource.Token).ConfigureAwait(false);
+		using var cancellationTokenSource = new CancellationTokenSource(_responseExpiry);
+		using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
+			cancellationToken,
+			cancellationTokenSource.Token
+		);
+		await SendRequestAsync(request, linkedTokenSource.Token).ConfigureAwait(false);
 
-				var response = await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token)
-					.ConfigureAwait(false);
+		var response = await ReceiveResponseAsync(request.Sequence, linkedTokenSource.Token)
+			.ConfigureAwait(false);
 
-				return (TResponsePayload)response.Payload;
-			}
-		}
+		return (TResponsePayload)response.Payload;
 	}
 
 	public void Dispose()
@@ -94,10 +83,8 @@ internal sealed class Communicator : ICommunicator
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			Response response;
-
 			// Return response if sequence matches
-			if (_responses.TryGetValue(sequence, out response))
+			if (_responses.TryGetValue(sequence, out var response))
 			{
 				var expiry = response.CreationDate.Add(_responseExpiry);
 
@@ -108,9 +95,10 @@ internal sealed class Communicator : ICommunicator
 			}
 
 			var result = await _client.ReceiveAsync().WithCancellation(cancellationToken).ConfigureAwait(false);
+			response = _responseParser.TryParseResponse(result.Buffer);
 
 			// Return response if sequence matches
-			if (_responseParser.TryParseResponse(result.Buffer, out response))
+			if (response != null)
 			{
 				if (response.Sequence == sequence)
 				{

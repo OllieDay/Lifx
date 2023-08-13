@@ -22,7 +22,7 @@ public sealed class RequestTests
 	[Fact]
 	public void GetDataShouldReturnDataOfCorrectLengthWhenPayloadIsNotEmpty()
 	{
-		var payload = new SetPowerRequestPayload(Power.Off, durationInMilliseconds: 0);
+		var payload = new SetPowerRequestPayload(Power.Off, DurationInMilliseconds: 0);
 		var length = RequestLength + payload.GetData().Length;
 		var data = CreateRequestData(payload: payload);
 
@@ -41,7 +41,7 @@ public sealed class RequestTests
 	[Fact]
 	public void GetDataShouldReturnDataWithCorrectSizeWhenPayloadIsNotEmpty()
 	{
-		var payload = new SetPowerRequestPayload(Power.Off, durationInMilliseconds: 0);
+		var payload = new SetPowerRequestPayload(Power.Off, DurationInMilliseconds: 0);
 		var length = (ushort)(RequestLength + payload.GetData().Length);
 		var data = CreateRequestData(payload: payload);
 		var size = GetSizeFromData(data);
@@ -180,10 +180,10 @@ public sealed class RequestTests
 		byte sequence = 0,
 		uint source = 0,
 		ulong target = 0,
-		RequestPayload payload = null
+		RequestPayload? payload = null
 	)
 	{
-		payload = payload ?? RequestPayload.Empty;
+		payload ??= RequestPayload.Empty;
 
 		return new Request(command, ackRequired, resRequired, sequence, source, target, payload).GetData();
 	}

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Lifx;
+﻿namespace Lifx;
 
 internal static class ComparableExtensions
 {

@@ -1,4 +1,3 @@
-using System.Threading;
 using Lifx.Communication.Requests.Payloads;
 
 namespace Lifx.Communication.Requests;

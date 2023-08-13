@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Lifx;
+﻿namespace Lifx;
 
 // Represents light temperature in kelvin from 2500 to 9000.
-public struct Temperature
+public readonly record struct Temperature
 {
 	public Temperature(int value)
 	{

@@ -1,15 +1,9 @@
 ﻿namespace Lifx;
 
 // Represents a color comprised of hue and saturation.
-public struct Color
+public readonly record struct Color(Hue Hue, Percentage Saturation)
 {
-	public Color(Hue hue, Percentage saturation)
-	{
-		Hue = hue;
-		Saturation = saturation;
-	}
-
-	public static Color None { get; } = White;
+	public static Color None { get; } = new Color(0, 0);
 
 	public static Color White { get; } = new Color(0, 0);
 	public static Color Red { get; } = new Color(0, 1);
@@ -20,9 +14,6 @@ public struct Color
 	public static Color Blue { get; } = new Color(250, 1);
 	public static Color Purple { get; } = new Color(280, 1);
 	public static Color Pink { get; } = new Color(325, 1);
-
-	public Hue Hue { get; }
-	public Percentage Saturation { get; }
 
 	public override string ToString()
 		=> $"[Hue: {Hue}; Saturation: {Saturation}]";

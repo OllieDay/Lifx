@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Lifx.Communication.Responses.Payloads;
+﻿using Lifx.Communication.Responses.Payloads;
 
 namespace Lifx.Communication.Responses;
 
@@ -20,49 +19,37 @@ internal sealed class ResponseParser : IResponseParser
 		_stateResponsePayloadParser = stateResponsePayloadParser;
 	}
 
-	public bool TryParseResponse(byte[] data, out Response response)
+	public Response? TryParseResponse(byte[] data)
 	{
-		response = null;
-
 		if (data.Length < ResponseLength)
 		{
-			return false;
+			return null;
 		}
 
-		if (!TryParsePayload(data, out var payload))
+		var payload = TryParsePayload(data);
+
+		if (payload == null)
 		{
-			return false;
+			return null;
 		}
 
 		var sequence = data[23];
-		response = new Response(sequence, payload);
 
-		return true;
+		return new Response(sequence, payload);
 	}
 
-	private bool TryParsePayload(byte[] data, out ResponsePayload payload)
+	private ResponsePayload? TryParsePayload(byte[] data)
 	{
-		payload = null;
-
 		var command = ParseCommand(data);
 		var payloadData = ParsePayloadData(data);
 
-		switch (command)
+		return command switch
 		{
-			case Command.DeviceAcknowledgement:
-				payload = ResponsePayload.Empty;
-				break;
-			case Command.DeviceStateVersion:
-				payload = _stateVersionResponsePayloadParser.Parse(payloadData);
-				break;
-			case Command.LightState:
-				payload = _stateResponsePayloadParser.Parse(payloadData);
-				break;
-			default:
-				return false;
-		}
-
-		return true;
+			Command.DeviceAcknowledgement => ResponsePayload.Empty,
+			Command.DeviceStateVersion => _stateVersionResponsePayloadParser.Parse(payloadData),
+			Command.LightState => _stateResponsePayloadParser.Parse(payloadData),
+			_ => null,
+		};
 	}
 
 	private static Command ParseCommand(byte[] data)

@@ -26,10 +26,8 @@ public sealed class LightTests
 
 		var requestFactoryMock = Substitute.For<IRequestFactory>();
 
-		using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock))
-		{
-			await light.SetBrightnessAsync(brightness);
-		}
+		using var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock);
+		await light.SetBrightnessAsync(brightness);
 
 		requestFactoryMock
 			.Received()
@@ -58,10 +56,8 @@ public sealed class LightTests
 
 		var requestFactoryMock = Substitute.For<IRequestFactory>();
 
-		using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock))
-		{
-			await light.SetTemperatureAsync(temperature);
-		}
+		using var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock);
+		await light.SetTemperatureAsync(temperature);
 
 		requestFactoryMock
 			.Received()
@@ -91,10 +87,8 @@ public sealed class LightTests
 
 		var requestFactoryMock = Substitute.For<IRequestFactory>();
 
-		using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock))
-		{
-			await light.SetTemperatureAsync(temperature);
-		}
+		using var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock);
+		await light.SetTemperatureAsync(temperature);
 
 		requestFactoryMock
 			.Received()
@@ -125,10 +119,8 @@ public sealed class LightTests
 
 		var requestFactoryMock = Substitute.For<IRequestFactory>();
 
-		using (var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock))
-		{
-			await light.SetColorAsync(color);
-		}
+		using var light = CreateLight(communicator: communicator, requestFactory: requestFactoryMock);
+		await light.SetColorAsync(color);
 
 
 		requestFactoryMock
@@ -147,13 +139,12 @@ public sealed class LightTests
 	[InlineData(Product.White900BR30)]
 	public void SetColorAsyncShouldThrowInvalidOperationExceptionWhenProductDoesNotSupportColor(Product product)
 	{
-		using (var light = CreateLight())
+		using var light = CreateLight(product: product);
+
+		Assert.ThrowsAnyAsync<InvalidOperationException>(async () =>
 		{
-			Assert.ThrowsAnyAsync<InvalidOperationException>(async () =>
-			{
-				await light.SetColorAsync(Color.Cyan);
-			});
-		}
+			await light.SetColorAsync(Color.Cyan);
+		});
 	}
 
 	[Fact]
@@ -180,16 +171,16 @@ public sealed class LightTests
 	}
 
 	private static ILight CreateLight(
-		IPAddress address = null,
+		IPAddress? address = null,
 		Product product = Product.Unknown,
 		uint version = 0,
-		ICommunicator communicator = null,
-		IRequestFactory requestFactory = null
+		ICommunicator? communicator = null,
+		IRequestFactory? requestFactory = null
 	)
 	{
-		communicator = communicator ?? Substitute.For<ICommunicator>();
-		requestFactory = requestFactory ?? Substitute.For<IRequestFactory>();
-		address = address ?? IPAddress.Any;
+		communicator ??= Substitute.For<ICommunicator>();
+		requestFactory ??= Substitute.For<IRequestFactory>();
+		address ??= IPAddress.Any;
 
 		return new Light(address, product, version, communicator, requestFactory);
 	}
