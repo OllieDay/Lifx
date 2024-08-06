@@ -5,7 +5,9 @@ internal sealed record SetColorRequestPayload(
 	Color Color,
 	Percentage Brightness,
 	Temperature Temperature,
-	uint DurationInMilliseconds
+	// ReSharper disable once BuiltInTypeReferenceStyle
+	// Required to be UInt32 per protocol docs, type uint is not honored
+	UInt32 DurationInMilliseconds
 ) : RequestPayload
 {
 	public override byte[] GetData()
