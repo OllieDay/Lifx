@@ -4,11 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Ollie Day</Authors>
     <Title>Lifx</Title>
     <Description>Library for controlling LIFX Wi-Fi Smart LED devices.</Description>
-    <Copyright>Copyright 2017-2019 (c) Ollie Day</Copyright>
+    <Copyright>Copyright 2017-2024 (c) Ollie Day</Copyright>
     <PackageTags>LIFX</PackageTags>
     <PackageLicenseUrl>https://github.com/OllieDay/Lifx/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/OllieDay/Lifx</PackageProjectUrl>
