@@ -3,12 +3,12 @@ namespace Lifx.Communication.Tests;
 public sealed class TaskExtensionsTests
 {
 	[Fact]
-	public void WithCancellationShouldCauseTaskToThrowOperationCanceledExceptionWhenCancellationTokenIsCancelled()
+	public async Task WithCancellationShouldCauseTaskToThrowOperationCanceledExceptionWhenCancellationTokenIsCancelled()
 	{
 		using var cancellationTokenSource = new CancellationTokenSource();
 		cancellationTokenSource.Cancel();
 
-		Assert.ThrowsAsync<OperationCanceledException>(async () =>
+		await Assert.ThrowsAsync<OperationCanceledException>(async () =>
 		{
 			// Will never complete
 			static object? Function()

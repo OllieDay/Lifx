@@ -137,11 +137,11 @@ public sealed class LightTests
 	[InlineData(Product.White800LowVoltage)]
 	[InlineData(Product.White800HightVoltage)]
 	[InlineData(Product.White900BR30)]
-	public void SetColorAsyncShouldThrowInvalidOperationExceptionWhenProductDoesNotSupportColor(Product product)
+	public async Task SetColorAsyncShouldThrowInvalidOperationExceptionWhenProductDoesNotSupportColor(Product product)
 	{
 		using var light = CreateLight(product: product);
 
-		Assert.ThrowsAnyAsync<InvalidOperationException>(async () =>
+		await Assert.ThrowsAnyAsync<InvalidOperationException>(async () =>
 		{
 			await light.SetColorAsync(Color.Cyan);
 		});
